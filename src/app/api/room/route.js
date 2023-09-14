@@ -5,25 +5,57 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   readDB();
+  const roomId = DB.get("rooms").get("roomId");
+ DB.
+  console.log(roomId);
+
+  if (!roomId) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Please provide roomId",
+      },
+      { status: 400 }
+    );
+  }
+
+  if (roomId) {
+    for (const room of DB.rooms) {
+      if (room.roomId === roomId) {
+        DB.push(room.rooms);
+      }
+    }
+  }
+  writeDB();
+
   return NextResponse.json({
     ok: true,
-    //rooms:
-    //totalRooms:
+    rooms: rooms,
+    // totalRooms: rooms.length,
   });
 };
 
 export const POST = async (request) => {
+  readDB();
+
   const payload = checkToken();
 
-  // return NextResponse.json(
-  //   {
-  //     ok: false,
-  //     message: "Invalid token",
-  //   },
-  //   { status: 401 }
-  // );
+  if (!payload) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: "Invalid token",
+      },
+      { status: 401 }
+    );
+  }
 
-  readDB();
+  if (role === "ADMIN" || role === "ADMIN") {
+    return NextResponse.json({
+      ok: true,
+      enrollments: DB.enrollments,
+    });
+  }
 
   // return NextResponse.json(
   //   {
